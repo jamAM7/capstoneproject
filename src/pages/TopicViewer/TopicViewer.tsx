@@ -10,13 +10,13 @@ import { useParams, useNavigate } from 'react-router-dom'
 import { topicsByCategory } from '../../data/topics'
 import styles from './TopicViewer.module.css'
 
-import ArrayVisualiser from '../../visualisers/arrays/ArrayVisualiser'
-import LinkedListVisualiser from '../../visualisers/linkedlist/LinkedListVisualiser'
+// import ArrayVisualiser from '../../visualisers/arrays/ArrayVisualiser'
+// import LinkedListVisualiser from '../../visualisers/linkedlist/LinkedListVisualiser'
 
-const visualiserMap: Record<string, React.ComponentType> = {
-  'Arrays': ArrayVisualiser,
-  'Linked Lists': LinkedListVisualiser,
-}
+// const visualiserMap: Record<string, React.ComponentType> = {
+//   'Arrays': ArrayVisualiser,
+//   'Linked Lists': LinkedListVisualiser,
+// }
 
 function TopicViewer() {
   const { category } = useParams<{ category: string }>()
