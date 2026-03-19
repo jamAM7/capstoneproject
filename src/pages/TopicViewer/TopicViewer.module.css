@@ -32,7 +32,8 @@
 .tabActive {
   background: var(--accent-muted);
   border-color: var(--accent);
-  color: var(--accent);
+  /* color: var(--accent); */
+  color: #0066ff;
 }
 
 /* Content layout */
@@ -116,7 +117,7 @@
   background: var(--accent);
   border: none;
   border-radius: var(--radius-sm);
-  color: #fff;
+  color: #fbff00;
   font-family: var(--font-body);
   font-size: 14px;
   font-weight: 500;
@@ -126,4 +127,67 @@
 
 .quizBtn:hover {
   background: var(--accent-hover);
+}
+
+
+
+
+/* Sub tabs */
+.subTabs {
+  display: flex;
+  gap: 8px;
+}
+
+.subTab {
+  padding: 10px 20px;
+  background: var(--bg-surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  color: var(--text-secondary);
+  font-family: var(--font-body);
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.15s;
+}
+
+.subTab:hover {
+  border-color: var(--accent);
+  color: var(--text-primary);
+}
+
+.subTabActive {
+  background: var(--accent);
+  border-color: var(--accent);
+  color: #0066ff;
+}
+
+/* Input row */
+.inputRow {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.inputLabel {
+  font-size: 13px;
+  color: var(--text-secondary);
+  white-space: nowrap;
+}
+
+.inputField {
+  padding: 8px 12px;
+  background: var(--bg-surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  color: var(--text-primary);
+  font-family: var(--font-body);
+  font-size: 13px;
+  width: 240px;
+  outline: none;
+  transition: border-color 0.15s;
+}
+
+.inputField:focus {
+  border-color: var(--accent);
 }
