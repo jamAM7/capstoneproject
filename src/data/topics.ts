@@ -4,7 +4,7 @@ export const topicsByCategory = {
     algorithms: ['Bubble Sort', 'Searching'],
   },
   graphs: {
-    structures: ['Graph'],
-    algorithms: ['BFS', 'DFS', 'Dijkstra', 'MST', 'Topological Sort'],
+    structures: ['Graph', 'BST'],
+    algorithms: ['DFS', 'Dijkstra', 'MST', 'Topological Sort'],
   },
 }

@@ -1,0 +1,20 @@
+.svg {
+  overflow: visible;
+}
+
+.edge {
+  stroke: rgb(0, 0, 0);
+  stroke-width: 2px;
+}
+
+.node {
+  fill: white;
+  stroke: black;
+  stroke-width: 2px;
+}
+
+.nodeText {
+  font-family: var(--font-display);
+  font-size: 13px;
+  fill: black;
+}

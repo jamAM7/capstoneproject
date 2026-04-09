@@ -39,7 +39,7 @@
 /* Content layout */
 .content {
   display: grid;
-  grid-template-columns: 1fr 340px;
+  grid-template-columns: 1fr 420px;
   gap: 20px;
   min-height: 440px;
 }
@@ -66,13 +66,40 @@
   border-bottom: 1px solid var(--border);
 }
 
-.visualArea,
-.pseudocodeArea {
+/* .visualArea,  */
+.visualArea {
+  flex: 1;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  /* margin: 25px; */
+  padding: 24px;
+  background-color: rgb(238, 238, 238, 0.707);
+  flex-direction: column;
+}
+.sortingViewSwitch {
+  height: 40px;
+  width: 100px;
+  background-color: rgb(120, 120, 255);
+  justify-content: center;
+  align-items: center;
+  margin: 25px;
+}
+/* .pseudocodeArea {
   flex: 1;
   display: flex;
   align-items: center;
   justify-content: center;
   padding: 24px;
+} */
+.pseudocodeArea {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: flex-start;
+  padding: 24px;
+  overflow-y: auto;
 }
 
 .placeholder {
@@ -191,3 +218,5 @@
 .inputField:focus {
   border-color: var(--accent);
 }
+
+
