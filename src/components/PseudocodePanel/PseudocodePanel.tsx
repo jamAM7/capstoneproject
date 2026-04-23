@@ -5,15 +5,25 @@ type Props = {
   activeLine: number | null
 }
 
+// function getLineClass(line: string): string {
+//   const trimmed = line.trim()
+//   if (trimmed.startsWith('class ')) return styles.tokenClass
+//   if (trimmed.startsWith('def ')) return styles.tokenDef
+//   if (trimmed.startsWith('if ') || trimmed.startsWith('else:') || trimmed.startsWith('elif ')) return styles.tokenControl
+//   if (trimmed.startsWith('return ')) return styles.tokenReturn
+//   if (trimmed.startsWith('self.') || trimmed.startsWith('node.')) return styles.tokenSelf
+//   if (trimmed === '') return styles.emptyLine
+//   return ''
+// }
 function getLineClass(line: string): string {
   const trimmed = line.trim()
   if (trimmed.startsWith('class ')) return styles.tokenClass
-  if (trimmed.startsWith('def ')) return styles.tokenDef
-  if (trimmed.startsWith('if ') || trimmed.startsWith('else:') || trimmed.startsWith('elif ')) return styles.tokenControl
+  if (trimmed.startsWith('function ')) return styles.tokenDef
+  if (trimmed.startsWith('if ') || trimmed.startsWith('else:') || trimmed.startsWith('else ') || trimmed.startsWith('elif ')) return styles.tokenControl
   if (trimmed.startsWith('return ')) return styles.tokenReturn
-  if (trimmed.startsWith('self.') || trimmed.startsWith('node.')) return styles.tokenSelf
+  if (trimmed.startsWith('node.')) return styles.tokenSelf
   if (trimmed === '') return styles.emptyLine
-  return ''
+  return styles.tokenDefault
 }
 
 function highlightLine(line: string): React.ReactNode {

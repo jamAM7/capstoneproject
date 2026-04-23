@@ -3,6 +3,7 @@ export type Step = {
   comparing: [number, number] | null
   swapping: [number, number] | null
   pseudoLine: number
+  pivot: number | null
 }
 
 export function bubbleSort(input: number[]): Step[] {
@@ -12,17 +13,17 @@ export function bubbleSort(input: number[]): Step[] {
   for (let i = 0; i < arr.length; i++) {
     for (let j = 0; j < arr.length - i - 1; j++) {
       // highlighting "if arr[j] > arr[j+1]" — line index 2
-      steps.push({ array: [...arr], comparing: [j, j + 1], swapping: null, pseudoLine: 2 })
+      steps.push({ array: [...arr], comparing: [j, j + 1], swapping: null, pivot: null, pseudoLine: 2 })
 
       if (arr[j] > arr[j + 1]) {
         ;[arr[j], arr[j + 1]] = [arr[j + 1], arr[j]]
         // highlighting "swap arr[j] and arr[j+1]" — line index 3
-        steps.push({ array: [...arr], comparing: null, swapping: [j, j + 1], pseudoLine: 3 })
+        steps.push({ array: [...arr], comparing: null, swapping: [j, j + 1], pivot: null, pseudoLine: 3 })
       }
     }
   }
 
-  steps.push({ array: [...arr], comparing: null, swapping: null, pseudoLine: 0 })
+  steps.push({ array: [...arr], comparing: null, swapping: null, pivot: null, pseudoLine: 0 })
 
   return steps
 }

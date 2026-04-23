@@ -50,6 +50,15 @@
   letter-spacing: 0.3px;
 }
 
+.tokenDefault {
+  color: #d4d4d4;
+}
+
+.tokenClass {
+  color: #c792ea;
+  font-weight: bold;
+}
+
 .tokenDef {
   color: #82aaff;
   font-weight: bold;

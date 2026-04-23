@@ -11,8 +11,9 @@
 }
 
 .logo {
+  /* font-family: 'Georgia', serif; */
   font-family: var(--font-display);
-  font-size: 16px;
+  font-size: 32px;
   font-weight: 700;
   color: var(--text-primary);
   text-decoration: none;

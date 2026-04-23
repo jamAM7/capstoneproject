@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react'
 import { useParams, useNavigate } from 'react-router-dom'
+import { useRef } from 'react'
 import { topicsByCategory } from '../../data/topics'
 import styles from './TopicViewer.module.css'
 
@@ -7,9 +8,12 @@ import ArrayVisualiser from '../../visualisers/arrays/ArrayVisualiser'
 import LinkedListVisualiser from '../../visualisers/linkedlist/LinkedListVisualiser'
 import SortingVisualiser from '../../visualisers/sorting/SortingVisualiser'
 import BSTVisualiser from '../../visualisers/bst/BSTVisualiser'
+import GridVisualiser from '../../visualisers/grid/GridVisualiser'
 
 import PseudocodePanel from '../../components/PseudocodePanel/PseudocodePanel'
 import { bubbleSortPseudo } from '../../visualisers/sorting/algorithms/bubbleSortPseudo'
+import { selectionSortPseudo } from '../../visualisers/sorting/algorithms/selectionSortPseudo'
+import { quickSortPseudo } from '../../visualisers/sorting/algorithms/quickSortPseudo'
 import { arrayPseudo } from '../../visualisers/arrays/algorithms/arrayPseudo'
 import { bstPseudo } from '../../visualisers/bst/algorithms/bstPseudo'
 
@@ -19,17 +23,22 @@ type VisualiserProps = {
   onStepsGenerated: (total: number) => void
   onPseudoLineChange: (line: number) => void
   barMode: boolean
+  activeTopic: string
 }
 
 const visualiserMap: Record<string, React.ComponentType<VisualiserProps>> = {
   'Arrays': ArrayVisualiser,
   'Linked Lists': LinkedListVisualiser,
   'Bubble Sort': SortingVisualiser,
+  'Selection Sort': SortingVisualiser,
+  'Quick Sort': SortingVisualiser,
   'BST': BSTVisualiser,
 }
 
 const pseudoMap: Record<string, string[]> = {
   'Bubble Sort': bubbleSortPseudo,
+  'Selection Sort': selectionSortPseudo,
+  'Quick Sort': quickSortPseudo,
   'Arrays': arrayPseudo,
   'BST': bstPseudo,
 }
@@ -59,8 +68,16 @@ function TopicViewer() {
   const Visualiser = visualiserMap[activeTopic]
   const pseudoLines = pseudoMap[activeTopic] ?? []
 
+  const [gridMode, setGridMode] = useState(false)
+  const gridResetRef = useRef<(() => void) | null>(null)
+  const gridClearRef = useRef<(() => void) | null>(null)
+  const gridRunRef = useRef<(() => void) | null>(null)
+  const [speed, setSpeed] = useState(100)
+
+  const isGraphAlgo = ['BFS', 'DFS', 'Dijkstra', 'A*'].includes(activeTopic)
+
   function handleBarButton() {
-    if (activeTopic == 'Bubble Sort') {
+    if (activeTopic == 'Bubble Sort' || activeTopic == 'Selection Sort' || activeTopic == 'Quick Sort') {
       setIsArray(true)
     } else {
       setIsArray(false)
@@ -91,9 +108,9 @@ function TopicViewer() {
         }
         return s + 1
       })
-    }, 600)
+    }, speed)
     return () => clearInterval(interval)
-  }, [isPlaying, currentStep, totalSteps])
+  }, [isPlaying, currentStep, totalSteps, speed])
 
   function handleSubTabChange(subTab: 'structures' | 'algorithms') {
     setActiveSubTab(subTab)
@@ -131,33 +148,50 @@ function TopicViewer() {
         ))}
       </div>
 
-      <div className={styles.inputRow}>
-        <label className={styles.inputLabel}>Input array:</label>
-        <input
-          className={styles.inputField}
-          type="text"
-          value={userInput}
-          onChange={(e) => setUserInput(e.target.value)}
-          placeholder="e.g. 5,2,4,3,9,1"
-        />
-      </div>
+      {!gridMode && (
+        <div className={styles.inputRow}>
+          <label className={styles.inputLabel}>Input array:</label>
+          <input
+            className={styles.inputField}
+            type="text"
+            value={userInput}
+            onChange={(e) => setUserInput(e.target.value)}
+            placeholder="e.g. 5,2,4,3,9,1"
+          />
+        </div>
+      )}
 
       <div className={styles.content}>
 
         <div className={styles.visualPanel}>
           <div className={styles.panelHeader}>Visual Representation</div>
           <div className={styles.visualArea}>
-            {Visualiser
-              ? <Visualiser
+            {gridMode
+              ? <GridVisualiser
                   data={inputArray}
                   currentStep={currentStep}
                   onStepsGenerated={setTotalSteps}
                   onPseudoLineChange={setActivePseudoLine}
                   barMode={barMode}
+                  activeTopic={activeTopic}
+                  onGridReady={(reset, clear, run) => {
+                    gridResetRef.current = reset
+                    gridClearRef.current = clear
+                    gridRunRef.current = run
+                  }}
                 />
-              : <span className={styles.placeholder}>Animation for {activeTopic}</span>
+              : Visualiser
+                ? <Visualiser
+                    data={inputArray}
+                    currentStep={currentStep}
+                    onStepsGenerated={setTotalSteps}
+                    onPseudoLineChange={setActivePseudoLine}
+                    barMode={barMode}
+                    activeTopic={activeTopic}
+                  />
+                : <span className={styles.placeholder}>Animation for {activeTopic}</span>
             }
-            {isArray
+            {isArray && !gridMode
               ? <button className={styles.sortingViewSwitch} onClick={() => setBarMode(b => !b)}>
                   {barMode ? 'Square Mode' : 'Bar Mode'}
                 </button>
@@ -166,12 +200,49 @@ function TopicViewer() {
           </div>
 
           <div className={styles.controls}>
-            <button className={styles.controlBtn} onClick={() => setCurrentStep(0)}>Reset</button>
-            <button className={styles.controlBtn} onClick={() => setCurrentStep(s => Math.max(0, s - 1))}>Back</button>
-            <button className={styles.controlBtn} onClick={() => setIsPlaying(p => !p)}>
-              {isPlaying ? 'Pause' : 'Play'}
-            </button>
-            <button className={styles.controlBtn} onClick={() => setCurrentStep(s => Math.min(totalSteps - 1, s + 1))}>Forward</button>
+            {gridMode ? (
+              <>
+                <button className={styles.controlBtn} onClick={() => {
+                  gridResetRef.current?.()
+                  setCurrentStep(0)
+                  setTotalSteps(0)
+                }}>Reset</button>
+                <button className={styles.controlBtn} onClick={() => gridClearRef.current?.()}>Clear Walls</button>
+                <button className={styles.controlBtn} onClick={() => {
+                  gridRunRef.current?.()
+                  setIsPlaying(p => !p)
+                }}>
+                  {isPlaying ? 'Pause' : 'Play'}
+                </button>
+                <button className={styles.controlBtn} onClick={() => setCurrentStep(s => Math.max(0, s - 1))}>Back</button>
+                <button className={styles.controlBtn} onClick={() => setCurrentStep(s => Math.min(totalSteps - 1, s + 1))}>Forward</button>
+                <button className={styles.controlBtn} onClick={() => setSpeed(s => s === 100 ? 50 : s === 50 ? 20 : 100)}>
+                  {speed === 100 ? '1x' : speed === 50 ? '2x' : '5x'}
+                </button>
+                <span className={styles.stepCount}>Step {currentStep + 1} of {totalSteps}</span>
+              </>
+            ) : (
+              <>
+                <button className={styles.controlBtn} onClick={() => {
+                  gridResetRef.current?.()
+                  setCurrentStep(0)
+                  setTotalSteps(0)
+                }}>Reset</button>
+                <button className={styles.controlBtn} onClick={() => setIsPlaying(p => !p)}>
+                  {isPlaying ? 'Pause' : 'Play'}
+                </button>
+                <button className={styles.controlBtn} onClick={() => setCurrentStep(s => Math.max(0, s - 1))}>Back</button>
+                <button className={styles.controlBtn} onClick={() => setCurrentStep(s => Math.min(totalSteps - 1, s + 1))}>Forward</button>
+                <button className={styles.controlBtn} onClick={() => setSpeed(s => s === 100 ? 50 : s === 50 ? 20 : 100)}>
+                  {speed === 100 ? '1x' : speed === 50 ? '2x' : '5x'}
+                </button>
+              </>
+            )}
+            {isGraphAlgo && (
+              <button className={styles.controlBtn} onClick={() => setGridMode(g => !g)}>
+                {gridMode ? 'Node View' : 'Grid View'}
+              </button>
+            )}
           </div>
         </div>
 
@@ -199,6 +270,147 @@ function TopicViewer() {
     </div>
   )
 }
+
+  // return (
+  //   <div className={styles.page}>
+
+  //     <div className={styles.subTabs}>
+  //       <button
+  //         className={`${styles.subTab} ${activeSubTab === 'structures' ? styles.subTabActive : ''}`}
+  //         onClick={() => handleSubTabChange('structures')}
+  //       >
+  //         Data Structures
+  //       </button>
+  //       <button
+  //         className={`${styles.subTab} ${activeSubTab === 'algorithms' ? styles.subTabActive : ''}`}
+  //         onClick={() => handleSubTabChange('algorithms')}
+  //       >
+  //         Algorithms
+  //       </button>
+  //     </div>
+
+  //     <div className={styles.tabs}>
+  //       {topics.map((topic) => (
+  //         <button
+  //           key={topic}
+  //           className={`${styles.tab} ${activeTopic === topic ? styles.tabActive : ''}`}
+  //           onClick={() => setActiveTopic(topic)}
+  //         >
+  //           {topic}
+  //         </button>
+  //       ))}
+  //     </div>
+
+  //     <div className={styles.inputRow}>
+  //       {!gridMode && (
+  //         <div className={styles.inputRow}>...</div>
+  //       )}
+  //       <label className={styles.inputLabel}>Input array:</label>
+  //       <input
+  //         className={styles.inputField}
+  //         type="text"
+  //         value={userInput}
+  //         onChange={(e) => setUserInput(e.target.value)}
+  //         placeholder="e.g. 5,2,4,3,9,1"
+  //       />
+  //     </div>
+
+  //     <div className={styles.content}>
+
+  //       <div className={styles.visualPanel}>
+  //         <div className={styles.panelHeader}>Visual Representation</div>
+  //         <div className={styles.visualArea}>
+  //           {Visualiser
+  //             ? <Visualiser
+  //                 data={inputArray}
+  //                 currentStep={currentStep}
+  //                 onStepsGenerated={setTotalSteps}
+  //                 onPseudoLineChange={setActivePseudoLine}
+  //                 barMode={barMode}
+  //                 activeTopic={activeTopic}
+  //               />
+  //             : <span className={styles.placeholder}>Animation for {activeTopic}</span>
+  //           }
+  //           {isArray
+  //             ? <button className={styles.sortingViewSwitch} onClick={() => setBarMode(b => !b)}>
+  //                 {barMode ? 'Square Mode' : 'Bar Mode'}
+  //               </button>
+  //             : null
+  //           }
+
+  //           {gridMode
+  //             ? <GridVisualiser
+  //                 data={inputArray}
+  //                 currentStep={currentStep}
+  //                 onStepsGenerated={setTotalSteps}
+  //                 onPseudoLineChange={setActivePseudoLine}
+  //                 barMode={barMode}
+  //                 activeTopic={activeTopic}
+  //                 onGridReady={(reset, clear) => {
+  //                   gridResetRef.current = reset
+  //                   gridClearRef.current = clear
+  //                 }}
+  //               />
+  //             : Visualiser
+  //               ? <Visualiser ... />
+  //               : <span className={styles.placeholder}>Animation for {activeTopic}</span>
+  //           }
+  //         </div>
+
+  //         <div className={styles.controls}>
+  //           <button className={styles.controlBtn} onClick={() => setCurrentStep(0)}>Reset</button>
+  //           <button className={styles.controlBtn} onClick={() => setCurrentStep(s => Math.max(0, s - 1))}>Back</button>
+  //           <button className={styles.controlBtn} onClick={() => setIsPlaying(p => !p)}>
+  //             {isPlaying ? 'Pause' : 'Play'}
+  //           </button>
+  //           <button className={styles.controlBtn} onClick={() => setCurrentStep(s => Math.min(totalSteps - 1, s + 1))}>Forward</button>
+
+  //           {gridMode && (
+  //             <>
+  //               <button className={styles.controlBtn} onClick={() => gridResetRef.current?.()}>Reset</button>
+  //               <button className={styles.controlBtn} onClick={() => gridClearRef.current?.()}>Clear Walls</button>
+  //             </>
+  //           )}
+  //           {!gridMode && (
+  //             <>
+  //               <button className={styles.controlBtn} onClick={() => setCurrentStep(0)}>Reset</button>
+  //               <button className={styles.controlBtn} onClick={() => setCurrentStep(s => Math.max(0, s - 1))}>Back</button>
+  //               <button className={styles.controlBtn} onClick={() => setIsPlaying(p => !p)}>{isPlaying ? 'Pause' : 'Play'}</button>
+  //               <button className={styles.controlBtn} onClick={() => setCurrentStep(s => Math.min(totalSteps - 1, s + 1))}>Forward</button>
+  //             </>
+  //           )}
+  //           {isGraphAlgo && (
+  //             <button className={styles.controlBtn} onClick={() => setGridMode(g => !g)}>
+  //               {gridMode ? 'Node View' : 'Grid View'}
+  //             </button>
+  //           )}
+  //         </div>
+  //       </div>
+
+  //       <div className={styles.pseudocodePanel}>
+  //         <div className={styles.panelHeader}>Pseudocode</div>
+  //         <div className={styles.pseudocodeArea}>
+  //           {pseudoLines.length > 0
+  //             ? <PseudocodePanel lines={pseudoLines} activeLine={activePseudoLine} />
+  //             : <span className={styles.placeholder}>Pseudocode for {activeTopic}</span>
+  //           }
+  //         </div>
+  //       </div>
+
+  //     </div>
+
+  //     <div className={styles.quizRow}>
+  //       <button
+  //         className={styles.quizBtn}
+  //         onClick={() => navigate(`/quiz/${category}/${activeTopic}`)}
+  //       >
+  //         Take a quiz on {activeTopic} →
+  //       </button>
+  //     </div>
+
+  //   </div>
+  // )
+// }
 
 export default TopicViewer
 
