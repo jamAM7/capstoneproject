@@ -9,6 +9,7 @@ import SortingVisualiser from '../../visualisers/sorting/SortingVisualiser'
 import BSTVisualiser from '../../visualisers/bst/BSTVisualiser'
 import GridVisualiser from '../../visualisers/grid/GridVisualiser'
 import NodeVisualiser from '../../visualisers/nodes/NodeVisualiser'
+import MergeSortVisualiser from '../../visualisers/sorting/MergeSortVisualiser'
 
 import PseudocodePanel from '../../components/PseudocodePanel/PseudocodePanel'
 import { bubbleSortPseudo } from '../../visualisers/sorting/algorithms/bubbleSortPseudo'
@@ -33,6 +34,7 @@ const visualiserMap: Record<string, React.ComponentType<VisualiserProps>> = {
   'Selection Sort': SortingVisualiser,
   'Quick Sort': SortingVisualiser,
   'BST': BSTVisualiser,
+  'Merge Sort': MergeSortVisualiser,
 }
 
 const pseudoMap: Record<string, string[]> = {

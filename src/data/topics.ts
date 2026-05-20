@@ -1,7 +1,7 @@
 export const topicsByCategory = {
   lists: {
     structures: ['Arrays', 'Linked Lists', 'Stacks', 'Queues'],
-    algorithms: ['Bubble Sort', 'Selection Sort', 'Quick Sort'],
+    algorithms: ['Bubble Sort', 'Selection Sort', 'Quick Sort', 'Merge Sort'],
   },
   graphs: {
     structures: ['Graph', 'BST'],

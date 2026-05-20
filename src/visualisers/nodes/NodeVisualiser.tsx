@@ -283,31 +283,7 @@ function NodeVisualiser({ currentStep, onStepsGenerated, activeTopic, onNodeRead
         }
     }
     }
-//   function handleNodeClick(id: NodeId) {
-//     if (mode === 'select') {
-//       setStartNode(id)
-//     } else if (mode === 'delete') {
-//       if (id === startNode || id === endNode) return
-//       setActiveNodes(prev => { const n = new Set(prev); n.delete(id); return n })
-//       setEdges(prev => prev.filter(e => e.a !== id && e.b !== id))
-//     } else if (mode === 'toggleEdge') {
-//       if (!edgeFrom) {
-//         setEdgeFrom(id)
-//       } else if (edgeFrom !== id) {
-//         const exists = edges.some(e =>
-//           (e.a === edgeFrom && e.b === id) || (e.a === id && e.b === edgeFrom)
-//         )
-//         if (exists) {
-//           setEdges(prev => prev.filter(e =>
-//             !((e.a === edgeFrom && e.b === id) || (e.a === id && e.b === edgeFrom))
-//           ))
-//         } else {
-//           setEdges(prev => [...prev, { a: edgeFrom, b: id }])
-//         }
-//         setEdgeFrom(null)
-//       }
-//     }
-//   }
+
 
   function handleNodeRightClick(e: React.MouseEvent, id: NodeId) {
     e.preventDefault()
@@ -423,6 +399,29 @@ function NodeVisualiser({ currentStep, onStepsGenerated, activeTopic, onNodeRead
 }
 
 export default NodeVisualiser
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
