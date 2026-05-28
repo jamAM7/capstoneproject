@@ -15,8 +15,10 @@ import PseudocodePanel from '../../components/PseudocodePanel/PseudocodePanel'
 import { bubbleSortPseudo } from '../../visualisers/sorting/algorithms/bubbleSortPseudo'
 import { selectionSortPseudo } from '../../visualisers/sorting/algorithms/selectionSortPseudo'
 import { quickSortPseudo } from '../../visualisers/sorting/algorithms/quickSortPseudo'
+import { mergeSortPseudo } from '../../visualisers/sorting/algorithms/mergeSortPseudo'
 import { arrayPseudo } from '../../visualisers/arrays/algorithms/arrayPseudo'
 import { bstPseudo } from '../../visualisers/bst/algorithms/bstPseudo'
+
 
 type VisualiserProps = {
   data: string[]
@@ -41,6 +43,7 @@ const pseudoMap: Record<string, string[]> = {
   'Bubble Sort': bubbleSortPseudo,
   'Selection Sort': selectionSortPseudo,
   'Quick Sort': quickSortPseudo,
+  'Merge Sort' : mergeSortPseudo,
   'Arrays': arrayPseudo,
   'BST': bstPseudo,
 }
