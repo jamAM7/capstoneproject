@@ -3,7 +3,7 @@
   flex-direction: column;
   gap: 24px;
   padding-top: 40px;
-  max-width: 1200px;
+  max-width: 2000px;
   margin: 0 auto;
   width: 100%;
 }
@@ -111,7 +111,16 @@
 }
 
 /* Panels */
-.visualPanel,
+.visualPanel {
+  display: flex;
+  flex-direction: column;
+  background: #ffffff;
+  border: 1px solid #e8e8e8;
+  border-radius: 16px;
+  overflow: auto;
+  box-shadow: 0 4px 24px rgba(0,0,0,0.07);
+}
+
 .pseudocodePanel {
   display: flex;
   flex-direction: column;
@@ -136,11 +145,12 @@
 .visualArea {
   flex: 1;
   display: flex;
-  justify-content: center;
+  justify-content: flex-start;
   align-items: center;
   flex-direction: column;
   padding: 24px;
   background-color: #fafafa;
+  overflow-x: auto;
 }
 
 .pseudocodeArea {
@@ -151,6 +161,7 @@
   justify-content: flex-start;
   padding: 16px;
   overflow-y: auto;
+  overflow-x: auto;          /* restored */
 }
 
 .placeholder {

@@ -18,6 +18,7 @@ import { quickSortPseudo } from '../../visualisers/sorting/algorithms/quickSortP
 import { mergeSortPseudo } from '../../visualisers/sorting/algorithms/mergeSortPseudo'
 import { arrayPseudo } from '../../visualisers/arrays/algorithms/arrayPseudo'
 import { bstPseudo } from '../../visualisers/bst/algorithms/bstPseudo'
+import { graphPseudocode } from '../../visualisers/graphPseudocode'
 
 
 type VisualiserProps = {
@@ -39,13 +40,23 @@ const visualiserMap: Record<string, React.ComponentType<VisualiserProps>> = {
   'Merge Sort': MergeSortVisualiser,
 }
 
+// const pseudoMap: Record<string, string[]> = {
+//   'Bubble Sort': bubbleSortPseudo,
+//   'Selection Sort': selectionSortPseudo,
+//   'Quick Sort': quickSortPseudo,
+//   'Merge Sort' : mergeSortPseudo,
+//   'Arrays': arrayPseudo,
+//   'BST': bstPseudo,
+// }
+
 const pseudoMap: Record<string, string[]> = {
   'Bubble Sort': bubbleSortPseudo,
   'Selection Sort': selectionSortPseudo,
   'Quick Sort': quickSortPseudo,
-  'Merge Sort' : mergeSortPseudo,
+  'Merge Sort': mergeSortPseudo,
   'Arrays': arrayPseudo,
   'BST': bstPseudo,
+  ...graphPseudocode,   // adds BFS, DFS, Dijkstra, 'A*' keys
 }
 
 function TopicViewer() {

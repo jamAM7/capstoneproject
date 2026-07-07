@@ -1,7 +1,8 @@
 .container {
-  display: flex;
+  display: inline-flex;      /* sizes to content, not parent */
   flex-direction: column;
-  width: 100%;
+  min-width: 100%;
+  width: max-content;
   font-family: 'Courier New', Courier, monospace;
   font-size: 13px;
   gap: 3px;
@@ -17,6 +18,7 @@
   border-radius: 4px;
   border-left: 3px solid transparent;
   transition: background-color 0.15s;
+  width: 100%;               /* 100% of container's content width */
 }
 
 .emptyLine {
@@ -35,22 +37,16 @@
   min-width: 20px;
   text-align: right;
   user-select: none;
+  flex-shrink: 0;
 }
 
 .lineText {
   color: #d4d4d4;
-  white-space: pre;
+  white-space: pre;          /* no wrap — overflow scrolls instead */
   letter-spacing: 0.3px;
 }
 
-/* Syntax highlighting */
-.lineText {
-  color: #d4d4d4;
-  white-space: pre;
-  letter-spacing: 0.3px;
-}
-
-.tokenDefault {
+/* .tokenDefault {
   color: #d4d4d4;
 }
 
@@ -63,6 +59,7 @@
   color: #82aaff;
   font-weight: bold;
 }
+
 .tokenControl {
   color: #f78c6c;
   font-weight: bold;
@@ -75,4 +72,37 @@
 
 .tokenSelf {
   color: #89ddff;
+} */
+
+
+.tokenDefault {
+  color: #d4d4d4;   /* plain assignments, expressions — neutral grey */
+}
+
+.tokenClass {
+  color: #c792ea;   /* purple — types/classes */
+  font-weight: bold;
+}
+
+.tokenDef {
+  color: #82aaff;   /* blue — function definitions */
+  font-weight: bold;
+}
+
+.tokenControl {
+  color: #c792ea;   /* purple — if/else/while/for (keyword-like) */
+  font-weight: bold;
+}
+
+.tokenReturn {
+  color: #f78c6c;   /* orange — return, stands out as flow-exit */
+  font-weight: bold;
+}
+
+.tokenOp {
+  color: #82aaff;   /* blue — create/add/push/append verbs */
+}
+
+.tokenSelf {
+  color: #89ddff;   /* cyan — node.* accessors */
 }
